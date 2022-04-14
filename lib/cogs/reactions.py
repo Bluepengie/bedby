@@ -67,7 +67,7 @@ class Reactions(Cog):
 			
 
 
-			if not message.author.bot: #and payload.member.id != message.author.id:
+			if not message.author.bot and payload.member.id != message.author.id:
 				msg_id, stars = db.record("SELECT StarMessageID, Stars FROM starboard WHERE RootMessageID = ?", 
 										  message.id) or (None, 0)
 				embed = Embed(title="Starred Message", 
@@ -119,7 +119,7 @@ class Reactions(Cog):
 			
 
 
-			if not message.author.bot: #and payload.member.id != message.author.id:
+			if not message.author.bot and payload.member.id != message.author.id:
 				msg_id, stars = db.record("SELECT StarMessageID, Stars FROM starboard WHERE RootMessageID = ?", 
 										  message.id) or (None, 0)
 				embed = Embed(color=0x00FF00,
