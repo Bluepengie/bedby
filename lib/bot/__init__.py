@@ -51,7 +51,7 @@ class Bot(BotBase):
         print("running setup...")
         self.setup()
 
-        with open("./lib/bot/token.0", "r", encoding="utf-8") as tf:
+        with open("./lib/bot/token2.0", "r", encoding="utf-8") as tf:
             self.TOKEN = tf.read()
 
         print("Running Bot...")
@@ -107,6 +107,8 @@ class Bot(BotBase):
             self.ready = True
             print("bot ready")
 
+            meta = self.get_cog("Meta")
+            await meta.set()
         else:
             print("bot reconnected")
 
