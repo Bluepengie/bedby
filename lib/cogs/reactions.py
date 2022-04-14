@@ -10,6 +10,8 @@ numbers = ("1️⃣", "2⃣", "3⃣", "4⃣", "5⃣",
 		   "6⃣", "7⃣", "8⃣", "9⃣", "🔟")
 STARBOARD_EMOJI = "⭐"
 
+STARBOARD_CHANNEL = 963994591562981396
+
 class Reactions(Cog):
 	def __init__(self, bot):
 		self.bot = bot
@@ -18,7 +20,7 @@ class Reactions(Cog):
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
-			self.starboard_channel = self.bot.get_channel(963994591562981396)
+			self.starboard_channel = self.bot.get_channel(STARBOARD_CHANNEL)
 			self.bot.cogs_ready.ready_up("reactions")
 
 
@@ -64,7 +66,7 @@ class Reactions(Cog):
 			
 
 
-			if not message.author.bot: #and payload.member.id != message.author.id:
+			if not message.author.bot and payload.member.id != message.author.id:
 				msg_id, stars = db.record("SELECT StarMessageID, Stars FROM starboard WHERE RootMessageID = ?", 
 										  message.id) or (None, 0)
 				embed = Embed(title="Starred Message", 
@@ -116,7 +118,7 @@ class Reactions(Cog):
 			
 
 
-			if not message.author.bot: #and payload.member.id != message.author.id:
+			if not message.author.bot and payload.member.id != message.author.id:
 				msg_id, stars = db.record("SELECT StarMessageID, Stars FROM starboard WHERE RootMessageID = ?", 
 										  message.id) or (None, 0)
 				embed = Embed(color=0x00FF00,
