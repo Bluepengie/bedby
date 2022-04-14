@@ -3,13 +3,17 @@ from datetime import datetime
 from glob import glob
 
 from ..db import db
-
+import discord
 from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import CommandNotFound, BadArgument
-from discord import Embed, File
+from discord import Embed, File, Intents
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
+
+# intents = discord.Intents.default()
+# intents.members = True
+# intents.presences = True
 
 PREFIX = "!"
 OWNER_IDS = [261133484209340417]
@@ -29,14 +33,16 @@ class Ready(object):
 
 class Bot(BotBase):
     def __init__(self):
-        self.PREFIX = PREFIX
+        self.prefix=PREFIX
         self.ready = False
         self.cogs_ready = Ready()
         self.scheduler=AsyncIOScheduler()
 
         db.autosave(self.scheduler)
 
-        super().__init__(command_prefix=PREFIX, owner_ids=OWNER_IDS)
+        super().__init__(command_prefix=PREFIX, 
+                         owner_ids=OWNER_IDS,
+                         intents=Intents.all())
 
     def setup(self):
         for cog in COGS:
@@ -115,6 +121,5 @@ class Bot(BotBase):
     async def on_message(self, message):
         if not message.author.bot:
             await self.process_commands(message)
-
 
 bot = Bot()

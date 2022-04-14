@@ -13,7 +13,7 @@ from ..db import db
 class Meta(Cog):
 	def __init__(self, bot):
 		self.bot = bot
-		self._message = "watching +help | {users:,} user in {guilds:,} servers"
+		self._message = "watching {users:,} users"
 
 		bot.scheduler.add_job(self.set, CronTrigger(second=0))
 
