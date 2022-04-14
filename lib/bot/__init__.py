@@ -5,14 +5,13 @@ from glob import glob
 from ..db import db
 
 from discord.ext.commands import Bot as BotBase
-from discord.ext.commands import CommandNotFound
+from discord.ext.commands import CommandNotFound, BadArgument
 from discord import Embed, File
-
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 
-PREFIX = "+"
+PREFIX = "!"
 OWNER_IDS = [261133484209340417]
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 
@@ -77,6 +76,9 @@ class Bot(BotBase):
         if isinstance(exc, CommandNotFound):
             pass
 
+        elif isinstance(exc, BadArgument):
+            pass
+
         elif hasattr(exc, "original"):
             raise exc.original
 
@@ -109,7 +111,8 @@ class Bot(BotBase):
             print("bot reconnected")
 
     async def on_message(self, message):
-        pass
+        if not message.author.bot:
+            await self.process_commands(message)
 
 
 bot = Bot()
