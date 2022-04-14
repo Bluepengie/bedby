@@ -103,6 +103,16 @@ class Fun(Cog):
 		await ctx.message.delete()
 		await ctx.send(message)
 
+	@command(name="kill")
+	async def kill_gif(self,ctx, member: Member):
+		gif_link = await random_gif(self, ctx, "kill")
+		await ctx.send(f"Bye {member.mention}")
+		await ctx.send(gif_link)
+
+	@command(name="joe")
+	async def joe_gif(self, ctx):
+		await ctx.send(await random_gif(self,ctx,"joe mama"))
+
 	@command(name="hug")
 	async def hug_gif(self, ctx, member: Member):
 		gif_link = await random_gif(self, ctx, "hug")
