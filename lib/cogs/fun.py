@@ -73,7 +73,7 @@ class Fun(Cog):
 				finalStr += f"{i+1}. {names[i]}\t{vals[i]}\n"
 			await ctx.send(finalStr)
 		else:
-			rows = db.records("SELECT UserID, DinkIn FROM dinkboard WHERE UserID NOT NULL")
+			rows = db.records("SELECT UserID, DinkIn FROM dinkboard ORDER BY DinkIn DESC")
 			names = [guild.get_member(row[0]).display_name for row in rows]
 			vals = [row[1] for row in rows]
 
