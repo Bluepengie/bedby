@@ -10,6 +10,9 @@ numbers = ("1️⃣", "2⃣", "3⃣", "4⃣", "5⃣",
 		   "6⃣", "7⃣", "8⃣", "9⃣", "🔟")
 STARBOARD_EMOJI = "⭐"
 
+STARBOARD_CHANNEL = 964016888961204316
+
+
 class Reactions(Cog):
 	def __init__(self, bot):
 		self.bot = bot
@@ -18,7 +21,7 @@ class Reactions(Cog):
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
-			self.starboard_channel = self.bot.get_channel(963994591562981396)
+			self.starboard_channel = self.bot.get_channel(STARBOARD_CHANNEL)
 			self.bot.cogs_ready.ready_up("reactions")
 
 
