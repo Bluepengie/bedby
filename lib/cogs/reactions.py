@@ -12,7 +12,6 @@ STARBOARD_EMOJI = "⭐"
 
 STARBOARD_CHANNEL = 964016888961204316
 
-
 class Reactions(Cog):
 	def __init__(self, bot):
 		self.bot = bot
