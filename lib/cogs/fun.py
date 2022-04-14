@@ -5,7 +5,13 @@ from discord.errors import HTTPException
 from discord.ext.commands import Cog
 from discord.ext.commands import command
 from ..db import db
+import requests
+import json
 
+# sex_choice = [f"{ctx.author.mention} and {member.mention}? 😳",
+# 			  f"Hey {member.mention}... {ctx.author.mention} wants you 😏",
+# 			  f"LITERALLY {ctx.author.mention} AND {member.mention} RIGHT NOW 😩😩😩"]
+apikey = "YK14B1TP47V4"
 
 class Fun(Cog):
 	def __init__(self, bot):
@@ -97,6 +103,30 @@ class Fun(Cog):
 		await ctx.message.delete()
 		await ctx.send(message)
 
+	@command(name="hug")
+	async def hug_gif(self, ctx, member: Member):
+		gif_link = await random_gif(self, ctx, "hug")
+		msg = f"Hug from {ctx.author.display_name} to {member.mention} ❤️"
+		await ctx.send(msg)
+		await ctx.send(gif_link)
+
+	@command(name="sex")
+	async def sex_gif(self, ctx, member: Member):
+		sex_choice = [f"{ctx.author.display_name} and {member.mention}? 😳",
+			  f"Hey {member.display_name}... {ctx.author.mention} wants you 😏",
+			  f"LITERALLY {ctx.author.display_name} AND {member.mention} RIGHT NOW 😩😩😩"]
+		gif_link = await random_gif(self, ctx, "sex")
+		msg = choice(sex_choice)
+		await ctx.send(msg)
+		await ctx.send(gif_link)
+
+	@command(name="gif", aliases=["randomgif"], pass_context=True)
+	async def gif_rand(self, ctx, search_term=""):
+		if search_term == "":
+			gif_link = await trending_gif(self,ctx)
+		else:
+			gif_link = await random_gif(self, ctx, search_term)
+		await ctx.send(gif_link)
 
 	@Cog.listener()
 	async def on_ready(self):
@@ -105,3 +135,21 @@ class Fun(Cog):
 
 def setup(bot):
 	bot.add_cog(Fun(bot))
+
+async def random_gif(self, ctx, search_term):
+	lmt = 1
+	r = requests.get(
+		f"https://g.tenor.com/v1/random?q={search_term}&key={apikey}&limit={lmt}")
+	if r.status_code == 200:
+		data = json.loads(r.content)
+		gif = data['results'][0]['media'][0]['gif']['url']
+		return gif
+
+async def trending_gif(self, ctx):
+	lmt = 50
+	r = requests.get(
+		f"https://g.tenor.com/v1/trending?key={apikey}&limit={lmt}")
+	if r.status_code == 200:
+		data = json.loads(r.content)
+		gif = data['results'][randint(0,49)]['media'][0]['gif']['url']
+		return gif
