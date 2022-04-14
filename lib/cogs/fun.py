@@ -17,6 +17,11 @@ class Fun(Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
+	@Cog.listener()
+	async def on_ready(self):
+		if not self.bot.ready:
+			self.bot.cogs_ready.ready_up("fun")
+
 	@command(name="hello", aliases=["hi"])
 	async def say_hello(self, ctx):
 		await ctx.send(f"Hello {ctx.author.mention}!")
@@ -121,17 +126,14 @@ class Fun(Cog):
 		await ctx.send(gif_link)
 
 	@command(name="gif", aliases=["randomgif"], pass_context=True)
-	async def gif_rand(self, ctx, search_term=""):
+	async def gif_rand(self, ctx, *, search_term: Optional[str] =""):
 		if search_term == "":
 			gif_link = await trending_gif(self,ctx)
 		else:
 			gif_link = await random_gif(self, ctx, search_term)
 		await ctx.send(gif_link)
 
-	@Cog.listener()
-	async def on_ready(self):
-		if not self.bot.ready:
-			self.bot.cogs_ready.ready_up("fun")
+
 
 def setup(bot):
 	bot.add_cog(Fun(bot))
