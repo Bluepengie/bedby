@@ -10,3 +10,9 @@ CREATE TABLE IF NOT EXISTS starboard (
   StarMessageID integer,
   Stars integer DEFAULT 1
 );
+
+CREATE TABLE IF NOT EXISTS dinkboard (
+  UserID integer PRIMARY KEY,
+  DinkOut integer DEFAULT 0,
+  DinkIn integer DEFAULT 0
+);
