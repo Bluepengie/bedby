@@ -6,7 +6,7 @@ import discord
 from discord import Activity, ActivityType, Embed, Status
 from discord import __version__ as discord_version
 from discord.ext.commands import Cog 
-from discord.ext.commands import command
+from discord.ext.commands import *
 from psutil import Process, virtual_memory
 from ..db import db
 
@@ -37,11 +37,13 @@ class Meta(Cog):
 		))
 
 	@command(name="setactivity")
+	@is_owner()
 	async def set_activity_message(self, ctx, *, text: str):
 		self.message = text
 		await self.set()
 
 	@command(name="ping")
+	@is_owner()
 	async def ping(self, ctx):
 		start = time()
 		message = await ctx.send(f"Pong! DWSP latency: {self.bot.latency*1000:,.0f}ms")
@@ -50,6 +52,7 @@ class Meta(Cog):
 		await message.edit(content= f"Pong! DWSP latency: {self.bot.latency*1000:,.0f}ms. Response time : {(end-start)*1000:,.0f} ms")
 
 	@command(name="stats")
+	@is_owner()
 	async def show_bot_stats(self, ctx):
 		embed = Embed(title = "Bot stats",
 					  color = ctx.author.color,
@@ -80,6 +83,7 @@ class Meta(Cog):
 		await ctx.send(embed=embed)
 
 	@command(name="shutdown")
+	@is_owner()
 	async def shutdown(self, ctx):
 		await ctx.send("Shutting down...")
 		

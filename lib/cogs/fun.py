@@ -1,9 +1,9 @@
 from random import choice, randint
 from typing import Optional
-from discord import Member
+from discord import Member, Embed
 from discord.errors import HTTPException
 from discord.ext.commands import Cog
-from discord.ext.commands import command
+from discord.ext.commands import *
 from ..db import db
 import requests
 import json
@@ -34,19 +34,22 @@ class Fun(Cog):
 		await ctx.send(" + ".join([str(r) for r in rolls]) + f" = {sum(rolls)}")
 
 	@command(name="dink")
+	@cooldown(3, 30, BucketType.user)
 	async def dink_member(self, ctx, member: Member, *, reason: Optional[str] = "just because"):
 		if member.id == self.bot.user.id:
 			await ctx.send("You can't dink me!")
 
 		elif member.bot:
-			await ctx.send(f"{ctx.author.mention} dinked {member.mention} {reason}\nBe advised, bots do not count for the dinkboard!")
+			await ctx.send(f"Be advised, bots do not count for the dinkboard!")
 		else:
 			await ctx.send(f"{ctx.author.mention} dinked {member.mention} {reason}")
+			await ctx.message.delete()
 			db.execute("UPDATE dinkboard SET DinkOut = DinkOut + 1 WHERE UserID = ?", ctx.author.id)
 			db.execute("UPDATE dinkboard SET DinkIn = DinkIn + 1 WHERE UserID = ?", member.id)
 			db.commit()
 
-	@command(name="dinklist", aliases=["dinkinit"])
+	@command(name="dinklist", aliases=["dinkinit"], pass_context=True)
+	@is_owner()
 	async def dinklist(self, ctx):
 		members = ctx.guild.members
 		new_members = 0
@@ -104,6 +107,7 @@ class Fun(Cog):
 	# 		await ctx.send("Can't find that user")
 
 	@command(name="echo", aliases=["say"])
+	@is_owner()
 	async def echo_message(self, ctx, *, message):
 		await ctx.message.delete()
 		await ctx.send(message)

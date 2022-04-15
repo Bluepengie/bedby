@@ -5,7 +5,7 @@ from glob import glob
 from ..db import db
 import discord
 from discord.ext.commands import Bot as BotBase
-from discord.ext.commands import CommandNotFound, BadArgument
+from discord.ext.commands import *
 from discord import Embed, File, Intents
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -79,10 +79,13 @@ class Bot(BotBase):
         raise 
 
     async def on_command_error(self, ctx, exc):
-        if isinstance(exc, CommandNotFound):
+        if isinstance(exc, NotOwner):
             pass
 
         elif isinstance(exc, BadArgument):
+            pass
+
+        elif isinstance(exc, CommandOnCooldown):
             pass
 
         elif hasattr(exc, "original"):
