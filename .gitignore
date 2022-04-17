@@ -1,7 +1,5 @@
 *.db
 *.db-journal
 __pycache__
-lib/bot/token.0
-lib/bot/token2.0
-lib/bot/ytToken.0
+lib/bot/*.0
 OpenJDK

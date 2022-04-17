@@ -130,7 +130,10 @@ class Fun(Cog):
 		await ctx.send(gif_link)
 
 	@command(name="sex")
+	@cooldown(5,60, BucketType.user)
 	async def sex_gif(self, ctx, member: Member):
+		if ctx.channel.id == self.bot.main_spamchannel:
+			ctx.command.reset_cooldown(ctx)
 		sex_choice = [f"{ctx.author.display_name} and {member.mention}? 😳",
 			  f"Hey {member.display_name}... {ctx.author.mention} wants you 😏",
 			  f"LITERALLY {ctx.author.display_name} AND {member.mention} RIGHT NOW 😩😩😩"]
@@ -140,7 +143,10 @@ class Fun(Cog):
 		await ctx.send(gif_link)
 
 	@command(name="gif", aliases=["randomgif"], pass_context=True)
+	@cooldown(5, 60, BucketType.user)
 	async def gif_rand(self, ctx, *, search_term: Optional[str] =""):
+		if ctx.channel.id == self.bot.main_spamchannel:
+			ctx.command.reset_cooldown(ctx)
 		if search_term == "":
 			gif_link = await trending_gif(self,ctx)
 		else:

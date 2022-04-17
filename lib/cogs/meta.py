@@ -15,6 +15,7 @@ class Meta(Cog):
 		self.bot = bot
 		self._message = "watching {users:,} users"
 
+
 		bot.scheduler.add_job(self.set, CronTrigger(second=0))
 
 
@@ -41,6 +42,14 @@ class Meta(Cog):
 	async def set_activity_message(self, ctx, *, text: str):
 		self.message = text
 		await self.set()
+
+	@command(name="spamchannel")
+	@is_owner()
+	async def set_activity_message(self, ctx):
+		self.bot.main_spamchannel = ctx.channel.id
+		with open("./lib/bot/spamchannel.0", "w", encoding="utf-8") as tf:
+			tf.write(str(ctx.channel.id))
+		print(f"new spam channel set: {ctx.channel.name}")
 
 	@command(name="ping")
 	@is_owner()

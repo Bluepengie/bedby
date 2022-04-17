@@ -1,9 +1,11 @@
 from youtubesearchpython import *
 from discord.ext.commands import Cog
-from discord.ext.commands import command
+from discord.ext.commands import *
 from discord import Embed
 from typing import Optional
 from datetime import datetime
+
+
 
 class YouTube(Cog):
 	def __init__(self, bot):
@@ -15,7 +17,10 @@ class YouTube(Cog):
 			self.bot.cogs_ready.ready_up("youtube")
 
 	@command(name="yt", aliases=["youtube", "video"])
+	@cooldown(1, 60, BucketType.user)
 	async def yt_search(self, ctx, *, search_term: Optional[str]=""):
+		if ctx.channel.id == self.bot.main_spamchannel:
+			ctx.command.reset_cooldown(ctx)
 		if search_term == "":
 			pass
 		else:

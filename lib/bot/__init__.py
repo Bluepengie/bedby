@@ -60,17 +60,20 @@ class Bot(BotBase):
         with open("./lib/bot/token.0", "r", encoding="utf-8") as tf:
             self.TOKEN = tf.read()
 
-        print("Running Bot...")
+        with open("./lib/bot/spamchannel.0", "r", encoding="utf-8") as tf:
+            self.main_spamchannel = tf.read()
+
+        print("running Bot...")
         super().run(self.TOKEN, reconnect=True)
 
     async def print_message(self):
         await self.stdout.send("I am a timed notification!")
 
     async def on_connect(self):
-        print("Bot Connected")
+        print(f"bot connected: {datetime.utcnow()}")
 
     async def on_disconnect(self):
-        print("Bot Disconnected")
+        print(f"bot disconnected: {datetime.utcnow()}")
 
     async def on_error(self, err, *args, **kwargs):
         if err == "on_command_error":
@@ -94,6 +97,9 @@ class Bot(BotBase):
         else:
             raise exc
 
+    async def on_reconnect(self):
+        print(f"bot reconnected: {datetime.utcnow()}")
+
     async def on_ready(self):
         if not self.ready:
             self.scheduler.start()
@@ -111,7 +117,7 @@ class Bot(BotBase):
             # await channel.send(embed=embed)
 
             while not self.cogs_ready.all_ready():
-                await sleep(0.5)
+                await sleep(0.2)
 
             self.ready = True
             print("bot ready")
